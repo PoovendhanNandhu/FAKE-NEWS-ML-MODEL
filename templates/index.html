@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fake News Detection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px;
+            background-color: #fff;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            margin-bottom: 30px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        textarea {
+            width: 100%;
+            resize: none;
+            border: 1px solid #ccc;
+            padding: 8px;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        input[type="submit"] {
+            display: inline-block;
+            background-color: #007BFF;
+            color: #fff;
+            padding: 8px 16px;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        #result {
+            margin-top: 30px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Fake News Detection</h1>
+        <form id="detect-form">
+            <label for="text">Enter the news text:</label>
+            <textarea id="text" name="text" rows="4" cols="50"></textarea>
+            <input type="submit" value="Detect">
+        </form>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('detect-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const text = document.getElementById('text').value;
+            const response = await fetch('/detect', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `text=${encodeURIComponent(text)}`
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                document.getElementById('result').innerText = data.result;
+            } else {
+                document.getElementById('result').innerText = 'Error: ' + response.statusText;
+            }
+        });
+    </script>
+</body>
+</html>
